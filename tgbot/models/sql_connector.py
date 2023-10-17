@@ -73,7 +73,7 @@ class BaseDAO:
     async def create_many(cls, data: List[dict]):
         async with async_session_maker() as session:
             stmt = insert(cls.model).values(data)
-            await session.add_all(stmt)
+            await session.execute(stmt)
             await engine.dispose()
             await session.commit()
 
