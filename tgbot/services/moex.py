@@ -35,7 +35,7 @@ class MoexFutures(MoexMain):
 async def test():
     a = await MoexStock.get_candles_data(ticker="VTBR", start_date="2023-10-11", end_date="2023-10-12", interval=60)
     b = await MoexFutures.get_candles_data(ticker="VBH4", start_date="2023-10-11", end_date="2023-10-12", interval=60)
-    print(a)
+    # print(a)
     print(b)
 
 

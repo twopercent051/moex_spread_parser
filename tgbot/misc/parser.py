@@ -33,7 +33,7 @@ class Parser:
                                                      start_date=start_date,
                                                      end_date=end_date,
                                                      interval=interval_number)
-        future_data = await MoexStock.get_candles_data(ticker=future_ticker,
+        future_data = await MoexFutures.get_candles_data(ticker=future_ticker,
                                                        start_date=start_date,
                                                        end_date=end_date,
                                                        interval=interval_number)
