@@ -16,12 +16,12 @@ class Parser:
             "1 week": 7
         }
 
-    def __match_stock_and_futures(self,
-                                  base_ticker: str,
-                                  future_ticker: str,
-                                  interval_string: str,
-                                  start_date: datetime,
-                                  end_date: datetime) -> List[dict]:
+    async def __match_stock_and_futures(self,
+                                        base_ticker: str,
+                                        future_ticker: str,
+                                        interval_string: str,
+                                        start_date: datetime,
+                                        end_date: datetime) -> List[dict]:
         interval_number = self.candles[interval_string]
         start_date = start_date.strftime("%Y-%m-%d")
         end_date = end_date.strftime("%Y-%m-%d")
@@ -57,11 +57,11 @@ class Parser:
         instruments = await InstrumentsDAO.get_many(f11430="НЕТ")
         text = []
         for item in instruments:
-            data = self.__match_stock_and_futures(base_ticker=item["f11370"],
-                                                  future_ticker=item["f11380"],
-                                                  interval_string=item["f11410"],
-                                                  start_date=item["f11390"],
-                                                  end_date=item["f11400"])
+            data = await self.__match_stock_and_futures(base_ticker=item["f11370"],
+                                                        future_ticker=item["f11380"],
+                                                        interval_string=item["f11410"],
+                                                        start_date=item["f11390"],
+                                                        end_date=item["f11400"])
             await SpreadStatisticsDAO.create_many(data=data)
             text.append(dict(base_ticker=item["f11370"], future_ticker=item["f11380"], quantity=len(data)))
         return text
