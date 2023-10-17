@@ -3,7 +3,7 @@ from typing import List
 
 from create_bot import logger
 from tgbot.models.sql_connector import InstrumentsDAO, SpreadStatisticsDAO
-from tgbot.services.moex import MoexStock
+from tgbot.services.moex import MoexStock, MoexFutures
 
 
 class Parser:
