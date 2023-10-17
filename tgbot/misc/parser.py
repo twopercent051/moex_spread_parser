@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List
 
+from create_bot import logger
 from tgbot.models.sql_connector import InstrumentsDAO, SpreadStatisticsDAO
 from tgbot.services.moex import MoexStock
 
@@ -34,9 +35,12 @@ class Parser:
                                                        end_date=end_date,
                                                        interval=interval_number)
         result = []
+        logger.info(base_ticker)
+        logger.info(future_data)
         for base in base_data:
             for future in future_data:
                 if datetime.strptime(base["begin"], "%Y-%m-%d %H:%M:%S") == datetime.strptime(future["begin"], "%Y-%m-%d %H:%M:%S"):
+
                     high_variation = base["high"] - future["high"]
                     low_variation = base["low"] - future["low"]
                     average_variation = (high_variation + low_variation) / 2
