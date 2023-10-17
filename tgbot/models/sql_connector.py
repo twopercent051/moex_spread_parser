@@ -34,7 +34,7 @@ class InstrumentsDB(Base):
 
 
 class SpreadStatisticsDB(Base):
-    __tablename__ = "cb_data580"
+    __tablename__ = "cb_data550"
 
     id = Column(Integer, nullable=False, autoincrement=True, primary_key=True)
     f10760 = Column(String)  # Базовый актив

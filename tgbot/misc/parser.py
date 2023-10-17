@@ -34,16 +34,16 @@ class Parser:
                                                      end_date=end_date,
                                                      interval=interval_number)
         future_data = await MoexFutures.get_candles_data(ticker=future_ticker,
-                                                       start_date=start_date,
-                                                       end_date=end_date,
-                                                       interval=interval_number)
+                                                         start_date=start_date,
+                                                         end_date=end_date,
+                                                         interval=interval_number)
         result = []
         logger.info(base_data)
         logger.info(future_data)
         for base in base_data:
             for future in future_data:
-                if datetime.strptime(base["begin"], "%Y-%m-%d %H:%M:%S") == datetime.strptime(future["begin"], "%Y-%m-%d %H:%M:%S"):
-
+                if datetime.strptime(base["begin"], "%Y-%m-%d %H:%M:%S") == datetime.strptime(future["begin"],
+                                                                                              "%Y-%m-%d %H:%M:%S"):
                     high_variation = base["high"] - future["high"]
                     low_variation = base["low"] - future["low"]
                     average_variation = (high_variation + low_variation) / 2
