@@ -1,21 +1,8 @@
 from datetime import datetime
 from typing import List
 
-from pydantic import BaseModel
-
 from tgbot.models.sql_connector import InstrumentsDAO, SpreadStatisticsDAO
 from tgbot.services.moex import MoexStock
-
-
-class MatchedData(BaseModel):
-    base_ticker: str
-    base_future: str
-    interval: str
-    start_candle: datetime
-    base_high: float
-    base_low: float
-    future_high: float
-    future_low: float
 
 
 class Parser:
@@ -34,7 +21,7 @@ class Parser:
                                   future_ticker: str,
                                   interval_string: str,
                                   start_date: datetime,
-                                  end_date: datetime) -> List[MatchedData]:
+                                  end_date: datetime) -> List[dict]:
         interval_number = self.candles[interval_string]
         start_date = start_date.strftime("%Y-%m-%d")
         end_date = end_date.strftime("%Y-%m-%d")
