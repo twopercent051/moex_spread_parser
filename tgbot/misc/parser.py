@@ -26,6 +26,9 @@ class Parser:
         interval_number = self.candles[interval_string]
         start_date = start_date.strftime("%Y-%m-%d")
         end_date = end_date.strftime("%Y-%m-%d")
+        logger.info(start_date)
+        logger.info(end_date)
+        logger.info(interval_number)
         base_data = await MoexStock.get_candles_data(ticker=base_ticker,
                                                      start_date=start_date,
                                                      end_date=end_date,
@@ -35,7 +38,7 @@ class Parser:
                                                        end_date=end_date,
                                                        interval=interval_number)
         result = []
-        logger.info(base_ticker)
+        logger.info(base_data)
         logger.info(future_data)
         for base in base_data:
             for future in future_data:
