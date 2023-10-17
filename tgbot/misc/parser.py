@@ -36,7 +36,7 @@ class Parser:
         result = []
         for base in base_data:
             for future in future_data:
-                if base["begin"] == future["begin"]:
+                if datetime.strptime(base["begin"], "%Y-%m-%d %H:%M:%S") == datetime.strptime(future["begin"], "%Y-%m-%d %H:%M:%S"):
                     high_variation = base["high"] - future["high"]
                     low_variation = base["low"] - future["low"]
                     average_variation = (high_variation + low_variation) / 2
