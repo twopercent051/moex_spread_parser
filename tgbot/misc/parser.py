@@ -22,13 +22,12 @@ class Parser:
                                         future_ticker: str,
                                         interval_string: str,
                                         start_date: datetime,
-                                        end_date: datetime) -> List[dict]:
+                                        end_date: datetime,
+                                        base_multiplier: int,
+                                        future_multiplier: int,) -> List[dict]:
         interval_number = self.candles[interval_string]
         start_date = start_date.strftime("%Y-%m-%d")
         end_date = end_date.strftime("%Y-%m-%d")
-        logger.info(start_date)
-        logger.info(end_date)
-        logger.info(interval_number)
         base_data = await MoexStock.get_candles_data(ticker=base_ticker,
                                                      start_date=start_date,
                                                      end_date=end_date,
@@ -38,22 +37,24 @@ class Parser:
                                                          end_date=end_date,
                                                          interval=interval_number)
         result = []
-        logger.info(base_data)
-        logger.info(future_data)
         for base in base_data:
             for future in future_data:
                 if datetime.strptime(base["begin"], "%Y-%m-%d %H:%M:%S") == datetime.strptime(future["begin"],
                                                                                               "%Y-%m-%d %H:%M:%S"):
-                    high_variation = base["high"] - future["high"]
-                    low_variation = base["low"] - future["low"]
+                    base_high = base["high"] * base_multiplier
+                    base_low = base["low"] * base_multiplier
+                    future_high = future["high"] * future_multiplier
+                    future_low = future["low"] * future_multiplier
+                    high_variation = base_high - future_high
+                    low_variation = base_low - future_low
                     average_variation = (high_variation + low_variation) / 2
                     result.append(dict(f10760=base_ticker,
                                        f10770=future_ticker,
                                        f11230=datetime.strptime(base["begin"], "%Y-%m-%d %H:%M:%S"),
-                                       f11240=base["high"],
-                                       f11250=future["high"],
-                                       f11270=base["low"],
-                                       f11260=future["low"],
+                                       f11240=base_high,
+                                       f11250=future_high,
+                                       f11270=base_low,
+                                       f11260=future_low,
                                        f11280=high_variation,
                                        f11290=low_variation,
                                        f11300=average_variation))
@@ -68,7 +69,9 @@ class Parser:
                                                         future_ticker=item["f11380"],
                                                         interval_string=item["f11410"],
                                                         start_date=item["f11390"],
-                                                        end_date=item["f11400"])
+                                                        end_date=item["f11400"],
+                                                        base_multiplier=item["f11740"],
+                                                        future_multiplier=item["f11750"])
             await SpreadStatisticsDAO.create_many(data=data)
             text.append(dict(base_ticker=item["f11370"], future_ticker=item["f11380"], quantity=len(data)))
         return text

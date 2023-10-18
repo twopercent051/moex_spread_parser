@@ -6,7 +6,7 @@ from .filters import AdminFilter
 from ...misc.parser import Parser
 
 router = Router()
-# router.message.filter(AdminFilter())
+router.message.filter(AdminFilter())
 
 parser = Parser()
 
