@@ -47,6 +47,7 @@ class Parser:
                     future_low = future["low"] * int(future_multiplier)
                     logger.info(int(base_multiplier))
                     logger.info(base["high"])
+                    logger.info(base_high)
                     high_variation = base_high - future_high
                     low_variation = base_low - future_low
                     average_variation = (high_variation + low_variation) / 2
