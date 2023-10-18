@@ -41,10 +41,10 @@ class Parser:
             for future in future_data:
                 if datetime.strptime(base["begin"], "%Y-%m-%d %H:%M:%S") == datetime.strptime(future["begin"],
                                                                                               "%Y-%m-%d %H:%M:%S"):
-                    base_high = base["high"] * base_multiplier
-                    base_low = base["low"] * base_multiplier
-                    future_high = future["high"] * future_multiplier
-                    future_low = future["low"] * future_multiplier
+                    base_high = base["high"] * float(base_multiplier)
+                    base_low = base["low"] * float(base_multiplier)
+                    future_high = future["high"] * float(future_multiplier)
+                    future_low = future["low"] * float(future_multiplier)
                     high_variation = base_high - future_high
                     low_variation = base_low - future_low
                     average_variation = (high_variation + low_variation) / 2
