@@ -36,13 +36,13 @@ class Parser:
                                    end_date=end_date,
                                    interval=interval_number)
         if base_instrument_type in ["Акция", ""]:
-            base_data = MoexStock.get_candles_data(**base_request_data)
+            base_data = await MoexStock.get_candles_data(**base_request_data)
         else:
-            base_data = MoexFutures.get_candles_data(**base_request_data)
+            base_data = await MoexFutures.get_candles_data(**base_request_data)
         if future_instrument_type in ["Фьючерс", ""]:
-            future_data = MoexFutures.get_candles_data(**future_request_data)
+            future_data = await MoexFutures.get_candles_data(**future_request_data)
         else:
-            future_data = MoexStock.get_candles_data(**future_request_data)
+            future_data = await MoexStock.get_candles_data(**future_request_data)
         result = []
         for base in base_data:
             for future in future_data:
