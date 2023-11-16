@@ -33,6 +33,8 @@ class InstrumentsDB(Base):
     f11410 = Column(String)  # Бары
     f11740 = Column(Integer)  # Множитель базового актива
     f11750 = Column(Integer)  # Множитель производного
+    f11930 = Column(String)  # Множитель производного
+    f11940 = Column(String)  # Множитель производного
 
 
 class SpreadStatisticsDB(Base):

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Literal
 
 from create_bot import logger
 from tgbot.models.sql_connector import InstrumentsDAO, SpreadStatisticsDAO
@@ -24,18 +24,25 @@ class Parser:
                                         start_date: datetime,
                                         end_date: datetime,
                                         base_multiplier: int,
-                                        future_multiplier: int,) -> List[dict]:
+                                        future_multiplier: int,
+                                        base_instrument_type: Literal["Акция", "Фьючерс", ""],
+                                        future_instrument_type: Literal["Акция", "Фьючерс", ""]) -> List[dict]:
         interval_number = self.candles[interval_string]
         start_date = start_date.strftime("%Y-%m-%d")
         end_date = end_date.strftime("%Y-%m-%d")
-        base_data = await MoexStock.get_candles_data(ticker=base_ticker,
-                                                     start_date=start_date,
-                                                     end_date=end_date,
-                                                     interval=interval_number)
-        future_data = await MoexFutures.get_candles_data(ticker=future_ticker,
-                                                         start_date=start_date,
-                                                         end_date=end_date,
-                                                         interval=interval_number)
+        base_request_data = dict(ticker=base_ticker, start_date=start_date, end_date=end_date, interval=interval_number)
+        future_request_data = dict(ticker=future_ticker,
+                                   start_date=start_date,
+                                   end_date=end_date,
+                                   interval=interval_number)
+        if base_instrument_type in ["Акция", ""]:
+            base_data = MoexStock.get_candles_data(**base_request_data)
+        else:
+            base_data = MoexFutures.get_candles_data(**base_request_data)
+        if future_instrument_type in ["Фьючерс", ""]:
+            future_data = MoexFutures.get_candles_data(**future_request_data)
+        else:
+            future_data = MoexStock.get_candles_data(**future_request_data)
         result = []
         for base in base_data:
             for future in future_data:
@@ -71,7 +78,9 @@ class Parser:
                                                         start_date=item["f11390"],
                                                         end_date=item["f11400"],
                                                         base_multiplier=item["f11740"],
-                                                        future_multiplier=item["f11750"])
+                                                        future_multiplier=item["f11750"],
+                                                        base_instrument_type=item["f11930"],
+                                                        future_instrument_type=item["f11940"])
             await SpreadStatisticsDAO.create_many(data=data)
             text.append(dict(base_ticker=item["f11370"], future_ticker=item["f11380"], quantity=len(data)))
         return text
